@@ -120,134 +120,287 @@ NitishSingh/
 └── vercel.json                          # Vercel deployment settings
 ```
 
-## 🏗️ Component Architecture & Data Flow
+## 🏗️ Detailed Module Architecture & Component Breakdown
 
-### 1. Page Components (App Router)
+### 📁 Core Application Modules
 
-#### Home Page (`src/app/page.tsx`)
-- **Purpose**: Main landing page
-- **Components Used**: Hero, ProjectsSection, Testimonials
-- **Data Flow**: Static content with dynamic project preview
-- **Features**: Hero slider, project showcase, testimonials carousel
+#### 🎯 **App Router Module** (`src/app/`)
+Complete Next.js 15 App Router implementation with advanced features:
 
-#### Projects Page (`src/app/projects/page.tsx`)
-- **Purpose**: Complete projects listing with filtering
-- **Data Source**: GitHub API via `getGithubProjects()`
-- **Components**: ProjectCard array rendering
-- **Features**: Project filtering, sorting, live metrics
+##### 📄 **Page Components**
+- **Root Layout** (`layout.tsx`): Application shell with Navbar, Footer, and global providers
+- **Home Page** (`page.tsx`): Landing page with Hero, ProjectsSection, and Testimonials
+- **Projects Hub** (`projects/page.tsx`): Complete project listing with GitHub API integration
+- **Project Detail** (`projects/[name]/page.tsx`): Dynamic project pages with SSR
+- **Contact Portal** (`contact/page.tsx`): Professional contact form with Formspree
+- **About Profile** (`about/page.tsx`): Personal and professional showcase
+- **Health Check** (`api/health/route.ts`): System health monitoring endpoint
 
-#### Project Detail Page (`src/app/projects/[name]/page.tsx`)
-- **Purpose**: Individual project deep-dive
-- **Data Source**: Dynamic API route `/api/projects/[name]`
-- **Features**: Detailed analytics, screenshots, tech stack
-- **SSR**: Server-side rendered for SEO optimization
+##### 🔌 **API Infrastructure**
+- **Projects API** (`api/projects/route.ts`): GitHub data aggregation with live metrics
+- **Individual Project API** (`api/projects/[name]/route.ts`): Detailed project analytics
+- **Dynamic Icons** (`icon.tsx`, `apple-icon.tsx`): Programmatic favicon generation
 
-#### Contact Page (`src/app/contact/page.tsx`)
-- **Purpose**: Contact form and professional signature
-- **Components**: ContactForm, contact information display
-- **Features**: Animated contact info, professional signature
-- **Form Handling**: Formspree integration
+#### 🧩 **Components Module** (`src/components/`)
+Reusable, feature-rich React components with TypeScript:
 
-#### About Page (`src/app/about/page.tsx`)
-- **Purpose**: Personal and professional information
-- **Content**: Skills, experience, background
-- **Design**: Professional layout with animations
+##### 🎨 **UI Components**
+- **Navbar** (`Navbar.tsx`): Responsive navigation with mobile hamburger menu
+- **Hero** (`Hero.tsx`): Animated hero section with image slider
+- **Footer** (`Footer.tsx`): Professional footer with social links and branding
 
-### 2. Core Components
+##### 📊 **Data Display Components**
+- **ProjectsSection** (`ProjectsSection.tsx`): Grid layout with GitHub API integration
+- **ProjectCard** (`ProjectCard.tsx`): Interactive project cards with hover effects
+- **LiveMetricsDashboard** (`LiveMetricsDashboard.tsx`): Real-time performance monitoring
+- **Testimonials** (`Testimonials.tsx`): Customer testimonials carousel
 
-#### Navigation (`src/components/Navbar.tsx`)
-```typescript
-Features:
-- Responsive mobile/desktop navigation
-- Active route highlighting
-- Smooth scroll navigation
-- Mobile hamburger menu
+##### 🎭 **Interactive Components**
+- **ImageSlider** (`ImageSlider.tsx`): Smooth image carousel with transitions
+- **ContactForm** (`ContactForm.tsx`): Validated contact form with Formspree integration
+
+#### 🔧 **Services Module** (`src/lib/`)
+Business logic and external API integrations:
+
+##### 🐙 **GitHub Integration** (`github.ts`)
+- **API Functions**: `getGithubProjects()`, `getGithubUser()`
+- **Image Management**: `imageExists()`, `getRandomFallbackImage()`
+- **Data Enhancement**: Repository data enrichment with live metrics
+- **Caching Strategy**: Response caching for performance optimization
+
+##### 📈 **Live Data Service** (`liveData.ts`)
+- **Real-time Metrics**: Performance monitoring and health checks
+- **Cache Management**: Intelligent caching with 5-minute TTL
+- **Error Handling**: Fallback to cached data on API failures
+- **Service Classes**: Singleton pattern for data consistency
+
+#### 🏷️ **Types Module** (`src/types/index.ts`)
+Comprehensive TypeScript definitions:
+
+##### 📋 **Core Interfaces**
+- **Project**: Enhanced GitHub repository with live metrics
+- **LiveMetrics**: Real-time performance data structure
+- **ProjectHealth**: Comprehensive health monitoring
+- **DeploymentInfo**: Deployment status and information
+- **GithubUser**: GitHub user profile data
+- **Testimonial**: Customer testimonial structure
+- **Review**: Project review system
+
+### 🎨 **Asset Management** (`public/`)
+Organized static asset structure:
+
+#### 🖼️ **Image Assets**
+- **Project Images**: `/images/projects/` - Specific project screenshots
+- **Fallback Images**: `/images/fallback/` - Default project placeholders
+- **Testimonials**: `/images/testimonials/` - Customer profile photos
+- **Hero Slider**: `/images/slider/` - Homepage carousel images
+- **Branding**: Custom favicon and icons
+
+#### 📄 **Static Files**
+- **SEO**: `robots.txt` for search engine optimization
+- **Icons**: Multiple favicon formats and sizes
+- **Config**: Vercel deployment configuration
+
+### ⚙️ **Configuration Module**
+Development and build configuration:
+
+#### 🔧 **Build Tools**
+- **Next.js Config** (`next.config.js`): Framework configuration
+- **TypeScript** (`tsconfig.json`): Strict type checking
+- **ESLint** (`eslint.config.mjs`): Code quality enforcement
+- **PostCSS** (`postcss.config.mjs`): CSS processing
+- **Tailwind** (`tailwind.config.js`): Utility-first styling
+
+#### 📦 **Dependencies**
+- **Core**: Next.js 15, React 19, TypeScript 5
+- **Styling**: Tailwind CSS 4, Framer Motion 12
+- **Integration**: Octokit (GitHub), Formspree (Forms)
+- **Icons**: Lucide React, React Icons
+
+## 🔄 Comprehensive Application Workflow Chart
+
+### 🌊 **Data Flow Architecture**
+
+```mermaid
+graph TB
+    subgraph "User Interface Layer"
+        A[User Browser] --> B[Next.js App Router]
+        B --> C[Root Layout]
+        C --> D[Navigation Bar]
+        C --> E[Page Content]
+        C --> F[Footer]
+    end
+
+    subgraph "Page Components"
+        E --> G[Home Page]
+        E --> H[Projects Page] 
+        E --> I[Project Detail]
+        E --> J[Contact Page]
+        E --> K[About Page]
+    end
+
+    subgraph "Component Layer"
+        G --> L[Hero Section]
+        G --> M[Projects Section]
+        G --> N[Testimonials]
+        
+        H --> O[Project Grid]
+        O --> P[Project Cards]
+        P --> Q[Live Metrics]
+        
+        I --> R[Project Details]
+        R --> S[Analytics Dashboard]
+        
+        J --> T[Contact Form]
+        T --> U[Formspree API]
+    end
+
+    subgraph "Data Services"
+        M --> V[GitHub Service]
+        O --> V
+        R --> V
+        V --> W[GitHub API]
+        
+        Q --> X[Live Data Service]
+        S --> X
+        X --> Y[Metrics Cache]
+        X --> Z[Health Monitoring]
+    end
+
+    subgraph "API Layer"
+        B --> AA[Projects API]
+        B --> BB[Project Detail API]
+        B --> CC[Health Check API]
+        
+        AA --> V
+        BB --> V
+        AA --> X
+        BB --> X
+    end
+
+    subgraph "External Services"
+        W --> DD[GitHub Repositories]
+        U --> EE[Formspree Service]
+        Z --> FF[Performance Monitoring]
+    end
+
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style V fill:#fff3e0
+    style X fill:#e8f5e8
+    style U fill:#fce4ec
+    style W fill:#f9fbe7
 ```
 
-#### Hero Section (`src/components/Hero.tsx`)
-```typescript
-Features:
-- Image slider with transitions
-- Call-to-action buttons
-- Animated text and elements
-- Responsive design
+### 🔀 **Request Processing Flow**
+
+#### 1. **Homepage Request Flow**
+```
+User Request → Next.js Router → Layout Component → Home Page
+    ↓
+Hero Component + Projects Section + Testimonials
+    ↓
+GitHub Service → GitHub API → Project Data
+    ↓
+Live Data Service → Cached Metrics → Real-time Display
+    ↓
+Rendered Homepage with Live Data
 ```
 
-#### Project Components
-- **ProjectsSection** (`src/components/ProjectsSection.tsx`)
-  - Grid layout for project display
-  - Integration with GitHub API
-  - Live metrics integration
-  
-- **ProjectCard** (`src/components/ProjectCard.tsx`)
-  - Individual project display
-  - Hover effects and animations
-  - Tech stack visualization
-  - Live status indicators
-
-#### Live Metrics Dashboard (`src/components/LiveMetricsDashboard.tsx`)
-```typescript
-Features:
-- Real-time data simulation
-- Performance metrics display
-- Status indicators
-- Interactive charts and gauges
+#### 2. **Projects Listing Flow**
+```
+Projects Route → Projects Page Component
+    ↓
+Projects API Endpoint (/api/projects)
+    ↓
+GitHub Service → Repository Fetching
+    ↓
+Live Data Service → Metrics Enhancement
+    ↓
+Project Cards with Live Status
+    ↓
+Interactive Grid Display
 ```
 
-#### Contact Form (`src/components/ContactForm.tsx`)
-```typescript
-Features:
-- Form validation
-- Formspree integration
-- Success/error states
-- Animated submission feedback
+#### 3. **Individual Project Flow**
+```
+Project Detail Route (/projects/[name])
+    ↓
+Dynamic API Route (/api/projects/[name])
+    ↓
+GitHub Service → Specific Repository Data
+    ↓
+Live Data Service → Enhanced Analytics
+    ↓
+Project Detail Page with Full Analytics
 ```
 
-### 3. API Routes & Data Management
-
-#### Projects API (`src/app/api/projects/route.ts`)
-- **Purpose**: Fetch and enhance GitHub project data
-- **Data Sources**: GitHub API, Live metrics
-- **Response**: Enhanced project data with analytics
-- **Caching**: Response caching for performance
-
-#### Individual Project API (`src/app/api/projects/[name]/route.ts`)
-- **Purpose**: Detailed project information
-- **Features**: Mock analytics, detailed descriptions
-- **Error Handling**: 404 for non-existent projects
-- **Data Enhancement**: Adds screenshots, features, challenges
-
-### 4. Service Layer
-
-#### GitHub Integration (`src/lib/github.ts`)
-```typescript
-Functions:
-- getGithubProjects(): Fetch user repositories
-- getGithubUser(): Fetch user profile
-- imageExists(): Check image availability
-- getRandomFallbackImage(): Fallback image selection
+#### 4. **Contact Form Flow**
+```
+Contact Form Component → Form Validation
+    ↓
+Formspree Integration → External API
+    ↓
+Success/Error State → User Feedback
+    ↓
+Email Notification → Form Submission Complete
 ```
 
-#### Live Data Service (`src/lib/liveData.ts`)
-```typescript
-Features:
-- Real-time metrics simulation
-- Caching mechanism
-- Performance monitoring
-- Health status tracking
+### 🔧 **System Architecture Components**
+
+#### **Frontend Architecture**
+- **Framework**: Next.js 15 with App Router
+- **Styling**: Tailwind CSS 4 with custom design system
+- **Animations**: Framer Motion for smooth transitions
+- **State Management**: React hooks and context
+- **Type Safety**: TypeScript with strict mode
+
+#### **Backend Architecture**
+- **API Routes**: Next.js API routes for server-side logic
+- **Data Fetching**: Server-side rendering and client-side hydration
+- **Caching**: Intelligent caching with TTL for performance
+- **Error Handling**: Graceful degradation and fallbacks
+
+#### **External Integrations**
+- **GitHub API**: Repository data via Octokit
+- **Formspree**: Contact form submissions
+- **Performance Monitoring**: Real-time metrics simulation
+- **Image Optimization**: Next.js automatic image optimization
+
+### 📊 **Data Processing Pipeline**
+
+```
+Raw GitHub Data → Data Enhancement → Cache Storage → Component Rendering
+    ↓              ↓                 ↓              ↓
+Repository Info    Live Metrics      5min TTL       Interactive UI
+Language Stats     Health Status     Error Fallback User Experience
+Commit History     Performance       Auto Refresh   Real-time Updates
 ```
 
-### 5. Type System (`src/types/index.ts`)
+### 🚀 **Deployment & Performance Flow**
 
-#### Core Types
-```typescript
-- Project: GitHub project with enhancements
-- LiveMetrics: Real-time performance data
-- DeploymentInfo: Deployment status information
-- ProjectHealth: Overall project health metrics
-- Testimonial: User testimonial structure
-- GithubUser: GitHub user profile data
+#### **Build Process**
 ```
+Source Code → TypeScript Compilation → Next.js Build
+    ↓             ↓                     ↓
+Type Checking     Bundle Optimization   Static Generation
+ESLint Check      Code Splitting        Image Optimization
+                  CSS Processing        SEO Enhancement
+    ↓
+Production Build → Vercel Deployment → Live Application
+```
+
+#### **Runtime Performance**
+```
+User Request → CDN Cache Check → Edge Function
+    ↓             ↓               ↓
+DNS Resolution    Cache Hit       Server Processing
+SSL Certificate   Fast Response   Data Fetching
+    ↓                             ↓
+Content Delivery ← Optimized Response ← Enhanced Data
+```
+
+This workflow ensures optimal performance, maintainability, and user experience through a well-structured architecture with clear separation of concerns and efficient data flow.
 
 ## 🎨 UI/UX Design System
 
@@ -306,7 +459,7 @@ Git for version control
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/nitishsghh/NitishSingh.git
+   git clone https://github.com/thenitishmind/NitishSingh.git
    cd NitishSingh
    ```
 
@@ -455,9 +608,8 @@ This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md
 
 **Developed and Designed by Nitish Singh**
 
-- **GitHub**: [@nitishsghh](https://github.com/nitishsghh)
-- **Email**: contact@nitishsingh.dev
-- **Portfolio**: [Live Portfolio](https://your-portfolio-url.com)
+- **GitHub**: [@thenitishmind](https://github.com/thenitishmind)
+- **Portfolio**: [Live Portfolio](https://nitishsingh.dev)
 
 ### Professional Skills Showcased
 - **Frontend Development**: React, Next.js, TypeScript
@@ -476,8 +628,8 @@ This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md
 
 For questions, suggestions, or collaboration opportunities:
 
-- **Issues**: [GitHub Issues](https://github.com/nitishsghh/NitishSingh/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/nitishsghh/NitishSingh/discussions)
+- **Issues**: [GitHub Issues](https://github.com/thenitishmind/NitishSingh/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/thenitishmind/NitishSingh/discussions)
 - **Email**: devops@nitishsingh.dev
 
 ---
