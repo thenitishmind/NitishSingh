@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /$
+Allow: /about$
+Allow: /projects$
+Allow: /contact$
+Allow: /blog$
+Allow: /static/*
+Disallow: /_next/
+Disallow: /api/ 
